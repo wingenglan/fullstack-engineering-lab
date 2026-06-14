@@ -12,12 +12,13 @@ type Response struct {
 	Data    interface{} `json:"data"`
 }
 
-// Business error codes
+// 业务错误码
 const (
 	CodeSuccess       = 0
 	CodeAuthFailed    = 40001
 	CodeTokenExpired  = 40003
 	CodeForbidden     = 40004
+	CodeLockConflict  = 40009
 	CodeInternalError = 50000
 )
 

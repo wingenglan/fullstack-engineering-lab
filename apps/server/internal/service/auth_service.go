@@ -30,17 +30,17 @@ func NewAuthService(userRepo repository.UserRepository, rdb *redis.Client, jwtCf
 }
 
 func (s *AuthService) Register(req *model.RegisterRequest) error {
-	// Check duplicate username
+	// 检查用户名是否重复
 	if _, err := s.userRepo.FindByUsername(req.Username); err == nil {
 		return errors.New("username already exists")
 	}
 
-	// Check duplicate email
+	// 检查邮箱是否重复
 	if _, err := s.userRepo.FindByEmail(req.Email); err == nil {
 		return errors.New("email already exists")
 	}
 
-	// Hash password
+	// 密码哈希
 	hash, err := password.Hash(req.Password)
 	if err != nil {
 		return errors.New("failed to hash password")
@@ -95,10 +95,10 @@ func (s *AuthService) GetProfile(userID uint) (*model.UserResponse, error) {
 
 func (s *AuthService) Logout(token string) error {
 	if s.rdb == nil {
-		return nil // Graceful degradation
+		return nil // Redis 不可用时优雅降级
 	}
 
-	// Store token in blacklist with TTL
+	// 将 Token 加入黑名单，TTL 与 Token 过期时间一致
 	ttl := time.Duration(s.jwtCfg.ExpireMinutes) * time.Minute
 	return s.rdb.Set(context.Background(), "blacklist:"+token, "1", ttl).Err()
 }

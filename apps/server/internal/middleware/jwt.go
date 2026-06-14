@@ -29,7 +29,7 @@ func JWTAuth(jwtSecret string, rdb *redis.Client) gin.HandlerFunc {
 
 		tokenString := parts[1]
 
-		// Check Redis blacklist
+		// 检查 Redis 黑名单
 		if rdb != nil {
 			ctx := c.Request.Context()
 			exists, err := rdb.Exists(ctx, "blacklist:"+tokenString).Result()

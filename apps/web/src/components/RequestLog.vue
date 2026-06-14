@@ -99,7 +99,7 @@ function formatJson(str: string): string {
 
 watch(() => props.logs.length, async () => {
   await nextTick()
-  // auto-scroll handled by parent
+  // 自动滚动由父组件处理
 })
 </script>
 

@@ -30,7 +30,7 @@ func Init(cfg *config.MySQLConfig) (*gorm.DB, error) {
 	sqlDB.SetMaxOpenConns(100)
 	sqlDB.SetConnMaxLifetime(time.Hour)
 
-	// Auto-migrate
+	// 自动迁移表结构
 	if err := db.AutoMigrate(&model.User{}); err != nil {
 		zap.L().Warn("auto-migrate failed", zap.Error(err))
 	}

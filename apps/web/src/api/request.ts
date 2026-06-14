@@ -14,7 +14,7 @@ const request = axios.create({
   },
 })
 
-// Request interceptor
+// 请求拦截器
 request.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     const token = localStorage.getItem('token')
@@ -22,7 +22,7 @@ request.interceptors.request.use(
       config.headers.Authorization = `Bearer ${token}`
     }
 
-    // Log request
+    // 记录请求日志
     const id = ++logId
     requestTimestamps.set(id, Date.now())
     ;(config as InternalAxiosRequestConfig & { _logId?: number })._logId = id
@@ -44,7 +44,7 @@ request.interceptors.request.use(
   (error) => Promise.reject(error)
 )
 
-// Response interceptor
+// 响应拦截器
 request.interceptors.response.use(
   (response: AxiosResponse) => {
     const config = response.config as InternalAxiosRequestConfig & { _logId?: number }

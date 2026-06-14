@@ -17,30 +17,41 @@ func Setup(cfg *config.Config, db *gorm.DB, rdb *redis.Client) *gin.Engine {
 	r.Use(gin.Recovery())
 	r.Use(middleware.CORS())
 
-	// Repositories
+	// 数据层
 	userRepo := repository.NewUserRepository(db)
 
-	// Services
+	// 服务层
 	authService := service.NewAuthService(userRepo, rdb, &cfg.JWT)
+	lockService := service.NewLockService(rdb)
 
-	// Handlers
+	// 处理器
 	authHandler := handler.NewAuthHandler(authService)
+	lockHandler := handler.NewLockHandler(lockService)
 	healthHandler := handler.NewHealthHandler(db, rdb)
 
-	// Routes
+	// 路由注册
 	api := r.Group("/api/v1")
 	{
-		// Public routes
+		// 公开路由
 		api.GET("/health", healthHandler.Check)
 		api.POST("/auth/register", authHandler.Register)
 		api.POST("/auth/login", authHandler.Login)
 
-		// Protected routes
+		// 需认证路由
 		auth := api.Group("/auth")
 		auth.Use(middleware.JWTAuth(cfg.JWT.Secret, rdb))
 		{
 			auth.GET("/profile", authHandler.Profile)
 			auth.POST("/logout", authHandler.Logout)
+		}
+
+		// Redis 分布式锁演示路由（公开访问）
+		lock := api.Group("/lock")
+		{
+			lock.POST("/acquire", lockHandler.Acquire)
+			lock.POST("/release", lockHandler.Release)
+			lock.POST("/status", lockHandler.Status)
+			lock.POST("/contention", lockHandler.ContentionDemo)
 		}
 	}
 

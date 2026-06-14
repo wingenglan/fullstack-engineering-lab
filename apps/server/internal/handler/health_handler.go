@@ -27,14 +27,14 @@ func (h *HealthHandler) Check(c *gin.Context) {
 		"redis":  "ok",
 	}
 
-	// Check DB
+	// 检查数据库
 	sqlDB, err := h.db.DB()
 	if err != nil || sqlDB.Ping() != nil {
 		data["db"] = "error"
 		data["status"] = "degraded"
 	}
 
-	// Check Redis
+	// 检查 Redis
 	if h.rdb != nil {
 		if err := h.rdb.Ping(context.Background()).Err(); err != nil {
 			data["redis"] = "error"

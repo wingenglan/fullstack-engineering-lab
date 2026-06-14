@@ -19,13 +19,13 @@ import (
 )
 
 func main() {
-	// Load config
+	// 加载配置
 	cfg, err := config.Load("./configs")
 	if err != nil {
 		panic("failed to load config: " + err.Error())
 	}
 
-	// Init logger
+	// 初始化日志
 	logger.Init(cfg.App.Env)
 	defer logger.Sync()
 
@@ -35,20 +35,20 @@ func main() {
 		zap.Int("port", cfg.App.Port),
 	)
 
-	// Init database
+	// 初始化数据库
 	db, err := database.Init(&cfg.MySQL)
 	if err != nil {
 		zap.L().Fatal("failed to init database", zap.Error(err))
 	}
 
-	// Init Redis
+	// 初始化 Redis
 	rdb := redis.NewClient(&redis.Options{
 		Addr:     cfg.Redis.Addr(),
 		Password: cfg.Redis.Password,
 		DB:       cfg.Redis.DB,
 	})
 
-	// Test Redis connection
+	// 测试 Redis 连接
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	if err := rdb.Ping(ctx).Err(); err != nil {
@@ -56,10 +56,10 @@ func main() {
 		rdb = nil
 	}
 
-	// Setup router
+	// 初始化路由
 	r := router.Setup(cfg, db, rdb)
 
-	// Start server
+	// 启动服务
 	addr := fmt.Sprintf(":%d", cfg.App.Port)
 	srv := &http.Server{
 		Addr:    addr,
@@ -73,7 +73,7 @@ func main() {
 		}
 	}()
 
-	// Graceful shutdown
+	// 优雅关闭
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit

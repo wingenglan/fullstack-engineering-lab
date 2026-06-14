@@ -55,7 +55,7 @@ func Load(configPath string) (*Config, error) {
 	v.SetConfigType("yaml")
 	v.AddConfigPath(configPath)
 
-	// Environment variables override
+	// 环境变量覆盖
 	v.AutomaticEnv()
 	v.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 
@@ -63,18 +63,18 @@ func Load(configPath string) (*Config, error) {
 		return nil, fmt.Errorf("read config: %w", err)
 	}
 
-	// Overlay environment-specific config
+	// 叠加环境专属配置
 	env := v.GetString("app.env")
 	if env == "" {
 		env = "dev"
 	}
 	v.SetConfigName(fmt.Sprintf("config.%s", env))
 	if err := v.MergeInConfig(); err != nil {
-		// Not fatal - base config may be sufficient
+		// 非致命错误——基础配置可能已足够
 		fmt.Printf("warn: could not load config.%s.yaml: %v\n", env, err)
 	}
 
-	// Override from environment variables
+	// 环境变量覆盖
 	if v := viper.GetString("MYSQL_HOST"); v != "" {
 		viper.Set("mysql.host", v)
 	}
@@ -108,7 +108,7 @@ func Load(configPath string) (*Config, error) {
 		return nil, fmt.Errorf("unmarshal config: %w", err)
 	}
 
-	// Apply env overrides using main viper instance
+	// 使用主 viper 实例应用环境变量覆盖
 	if h := viper.GetString("MYSQL_HOST"); h != "" {
 		cfg.MySQL.Host = h
 	}

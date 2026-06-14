@@ -59,14 +59,14 @@ const phases = [
     title: '阶段一：认证与基础工程',
     desc: 'JWT 认证授权、RBAC 权限控制、Docker 部署、CI/CD 流水线、项目脚手架。',
     items: ['JWT 认证案例', 'Docker Compose', 'CI/CD', 'Monorepo'],
-    current: true,
-    done: false,
+    current: false,
+    done: true,
   },
   {
     title: '阶段二：实时通信与缓存',
     desc: 'WebSocket 通信、Redis 分布式锁、实时数据同步。',
     items: ['WebSocket 聊天', 'Redis 分布式锁', '发布/订阅', '在线状态'],
-    current: false,
+    current: true,
     done: false,
   },
   {

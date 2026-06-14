@@ -88,13 +88,17 @@
         <p class="section-desc text-center mb-12">从基础到生产的结构化学习路径</p>
         <div class="grid md:grid-cols-4 gap-6">
           <GlowCard v-for="(phase, i) in roadmapPhases" :key="i" class="text-center">
-            <div class="w-10 h-10 mx-auto mb-4 rounded-full bg-brand/10 flex items-center justify-center text-brand font-bold">
-              {{ i + 1 }}
+            <div class="w-10 h-10 mx-auto mb-4 rounded-full flex items-center justify-center font-bold" :class="phase.done ? 'bg-success text-white' : phase.current ? 'bg-brand text-white' : 'bg-brand/10 text-brand'">
+              <i v-if="phase.done" class="i-lucide-check w-5 h-5" />
+              <span v-else>{{ i + 1 }}</span>
             </div>
             <h3 class="text-text-primary font-semibold mb-2">{{ phase.title }}</h3>
             <p class="text-text-secondary text-sm">{{ phase.desc }}</p>
-            <div v-if="i === 0" class="mt-3 px-3 py-1 inline-block text-xs rounded-full bg-brand/10 text-brand">
+            <div v-if="phase.current" class="mt-3 px-3 py-1 inline-block text-xs rounded-full bg-brand/10 text-brand">
               进行中
+            </div>
+            <div v-if="phase.done" class="mt-3 px-3 py-1 inline-block text-xs rounded-full bg-success/10 text-success">
+              已完成
             </div>
           </GlowCard>
         </div>
@@ -128,7 +132,7 @@ const searchQuery = ref('')
 const categories = [
   { name: '认证授权', icon: 'i-lucide-shield', color: '#6366F1', count: 1 },
   { name: '实时通信', icon: 'i-lucide-zap', color: '#F59E0B', count: 0 },
-  { name: '缓存', icon: 'i-lucide-database', color: '#EF4444', count: 0 },
+  { name: '缓存', icon: 'i-lucide-database', color: '#EF4444', count: 1 },
   { name: '消息队列', icon: 'i-lucide-list-ordered', color: '#8B5CF6', count: 0 },
   { name: '文件存储', icon: 'i-lucide-hard-drive', color: '#10B981', count: 0 },
   { name: '定时任务', icon: 'i-lucide-clock', color: '#F97316', count: 0 },
@@ -138,16 +142,16 @@ const categories = [
 
 const featuredCases = [
   { id: 'jwt', title: 'JWT 认证授权', description: '基于 JWT 的完整认证流程，包含注册、登录、Token 管理和 Redis 黑名单。', tags: ['Go', 'JWT', 'Redis'], difficulty: 'easy' as const, status: 'available' as const, icon: 'i-lucide-shield', to: '/cases/jwt-auth' },
+  { id: 'redis-lock', title: 'Redis 分布式锁', description: '基于 Redis SET NX EX 实现的分布式锁，演示互斥、自动过期和并发争抢。', tags: ['Redis', 'Go', 'Lua'], difficulty: 'medium' as const, status: 'available' as const, icon: 'i-lucide-lock', to: '/cases/redis-lock' },
   { id: 'ws', title: 'WebSocket 实时通信', description: '基于 WebSocket 的实时双向通信，支持群聊和在线状态。', tags: ['WebSocket', 'Go', 'Vue'], difficulty: 'medium' as const, status: 'coming-soon' as const, icon: 'i-lucide-message-circle', to: '#' },
-  { id: 'redis', title: 'Redis 分布式锁', description: '基于 Redis 实现分布式锁，用于并发任务协调。', tags: ['Redis', 'Go', '并发'], difficulty: 'medium' as const, status: 'coming-soon' as const, icon: 'i-lucide-lock', to: '#' },
   { id: 'chunk', title: '大文件分片上传', description: '大文件分片上传，支持断点续传和上传进度追踪。', tags: ['文件', 'Go', 'Vue'], difficulty: 'medium' as const, status: 'coming-soon' as const, icon: 'i-lucide-upload', to: '#' },
 ]
 
 const roadmapPhases = [
-  { title: '认证与基础', desc: 'JWT、RBAC、基础工程化搭建' },
-  { title: '实时与缓存', desc: 'WebSocket、Redis 分布式锁' },
-  { title: '队列与调度', desc: '消息队列、定时任务、异步处理' },
-  { title: '文件与支付', desc: '文件上传、分片上传、支付对接' },
+  { title: '认证与基础', desc: 'JWT、RBAC、基础工程化搭建', done: true, current: false },
+  { title: '实时与缓存', desc: 'WebSocket、Redis 分布式锁', done: false, current: true },
+  { title: '队列与调度', desc: '消息队列、定时任务、异步处理', done: false, current: false },
+  { title: '文件与支付', desc: '文件上传、分片上传、支付对接', done: false, current: false },
 ]
 
 const features = [

@@ -52,3 +52,55 @@ export interface CaseItem {
   icon: string
   to: string
 }
+
+// ===== Redis Lock Types =====
+
+export interface LockAcquireRequest {
+  resource: string
+  ttl: number
+}
+
+export interface LockAcquireResponse {
+  resource: string
+  owner: string
+  ttl: number
+}
+
+export interface LockReleaseRequest {
+  resource: string
+}
+
+export interface LockStatusRequest {
+  resource: string
+}
+
+export interface LockStatusResponse {
+  resource: string
+  locked: boolean
+  owner: string
+  ttl_ms: number
+}
+
+export interface ContentionDemoRequest {
+  resource: string
+  ttl: number
+  goroutines: number
+  hold_ms: number
+}
+
+export interface ContentionResult {
+  goroutine_id: number
+  acquired: boolean
+  wait_ms: number
+  message: string
+}
+
+export interface ContentionDemoResponse {
+  resource: string
+  results: ContentionResult[]
+  summary: {
+    total: number
+    succeeded: number
+    failed: number
+  }
+}

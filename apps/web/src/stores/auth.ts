@@ -48,7 +48,7 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       await authApi.logout()
     } catch {
-      // ignore logout error
+      // 忽略退出登录的错误
     } finally {
       user.value = null
       token.value = null

@@ -23,7 +23,7 @@ FullStack Engineering Lab 是一个面向开发者的 **技术实验室 / Develo
 | 阶段 | 案例 | 状态 |
 |------|------|------|
 | Phase 1 | JWT 认证授权 | 已完成 |
-| Phase 2 | WebSocket 实时通信、Redis 分布式锁 | 计划中 |
+| Phase 2 | WebSocket 实时通信、Redis 分布式锁 | 部分完成 |
 | Phase 3 | 消息队列、定时任务 | 计划中 |
 | Phase 4 | 文件上传、大文件分片、支付对接 | 计划中 |
 | Phase 5 | 搜索引擎、AI 集成 | 计划中 |
@@ -110,6 +110,7 @@ docker compose -f deploy/docker-compose.yml up -d
 | 前端体验台 | http://localhost:3000 |
 | 后端 API | http://localhost:8080 |
 | JWT Demo | http://localhost:3000/cases/jwt-auth |
+| Redis Lock Demo | http://localhost:3000/cases/redis-lock |
 | 健康检查 | http://localhost:8080/api/v1/health |
 | 文档站 | http://localhost:5174 |
 | API 文档 | http://localhost:8080/swagger/index.html |
@@ -146,6 +147,17 @@ make build     # 构建所有镜像
 - 退出登录（Redis Token 黑名单）
 - Token 解码展示
 - 请求日志实时查看
+
+## Redis Lock Demo
+
+第二个案例，演示基于 Redis 的分布式锁：
+
+- 获取分布式锁（SET NX EX）
+- 释放分布式锁（Lua 原子操作）
+- 锁状态实时查询
+- 并发争抢演示（多协程互斥）
+- TTL 自动过期防死锁
+- Owner Token 防误删
 
 ## Roadmap
 

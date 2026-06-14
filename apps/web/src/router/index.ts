@@ -18,6 +18,11 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/views/cases/JwtAuthView.vue'),
   },
   {
+    path: '/cases/redis-lock',
+    name: 'RedisLock',
+    component: () => import('@/views/cases/RedisLockView.vue'),
+  },
+  {
     path: '/roadmap',
     name: 'Roadmap',
     component: () => import('@/views/RoadmapView.vue'),
