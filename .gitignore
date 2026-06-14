@@ -1,0 +1,51 @@
+# Dependencies
+node_modules/
+vendor/
+
+# Build output
+dist/
+build/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Go
+/tmp/
+*.test
+*.out
+*.prof
+
+# VitePress
+apps/docs/.vitepress/cache
+apps/docs/.vitepress/dist
+
+# Docker
+*.pid
+
+# Coverage
+coverage/
+*.cover

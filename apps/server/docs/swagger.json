@@ -1,0 +1,67 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "FullStack Engineering Lab API",
+    "version": "1.0",
+    "description": "API documentation for FullStack Engineering Lab"
+  },
+  "host": "localhost:8080",
+  "basePath": "/api/v1",
+  "schemes": ["http"],
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": ["Health"],
+        "summary": "Health check",
+        "responses": {
+          "200": {"description": "OK"}
+        }
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Register a new user",
+        "responses": {
+          "200": {"description": "OK"}
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User login",
+        "responses": {
+          "200": {"description": "OK"}
+        }
+      }
+    },
+    "/auth/profile": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "Get user profile",
+        "security": [{"BearerAuth": []}],
+        "responses": {
+          "200": {"description": "OK"}
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Logout",
+        "security": [{"BearerAuth": []}],
+        "responses": {
+          "200": {"description": "OK"}
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "BearerAuth": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  }
+}

@@ -1,0 +1,83 @@
+/* Element Plus Dark Theme Overrides */
+html.dark {
+  --el-bg-color: #18181B;
+  --el-bg-color-overlay: #27272A;
+  --el-bg-color-page: #09090B;
+  --el-text-color-primary: #F4F4F5;
+  --el-text-color-regular: #A1A1AA;
+  --el-text-color-secondary: #71717A;
+  --el-text-color-placeholder: #52525B;
+  --el-border-color: rgba(255, 255, 255, 0.08);
+  --el-border-color-light: rgba(255, 255, 255, 0.05);
+  --el-border-color-lighter: rgba(255, 255, 255, 0.03);
+  --el-color-primary: #6366F1;
+  --el-color-primary-light-3: #818CF8;
+  --el-color-primary-light-5: #A5B4FC;
+  --el-color-primary-dark-2: #4F46E5;
+  --el-color-success: #10B981;
+  --el-color-warning: #F59E0B;
+  --el-color-danger: #EF4444;
+  --el-color-info: #6366F1;
+  --el-fill-color-blank: #18181B;
+  --el-fill-color: #27272A;
+  --el-fill-color-light: #3F3F46;
+  --el-mask-color: rgba(9, 9, 11, 0.8);
+}
+
+/* Button overrides */
+.el-button--primary {
+  --el-button-bg-color: #6366F1;
+  --el-button-border-color: #6366F1;
+  --el-button-hover-bg-color: #818CF8;
+  --el-button-hover-border-color: #818CF8;
+  --el-button-active-bg-color: #4F46E5;
+  --el-button-active-border-color: #4F46E5;
+}
+
+/* Input overrides */
+.el-input__wrapper {
+  background-color: #27272A !important;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08) inset !important;
+}
+
+.el-input__wrapper:hover {
+  box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.3) inset !important;
+}
+
+.el-input__wrapper.is-focus {
+  box-shadow: 0 0 0 1px #6366F1 inset !important;
+}
+
+/* Card overrides */
+.el-card {
+  --el-card-bg-color: #18181B;
+  --el-card-border-color: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+}
+
+/* Message overrides */
+.el-message {
+  --el-message-bg-color: #27272A;
+  --el-message-border-color: rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+}
+
+/* Dialog overrides */
+.el-dialog {
+  --el-dialog-bg-color: #18181B;
+  border-radius: 16px;
+}
+
+/* Table overrides */
+.el-table {
+  --el-table-bg-color: #18181B;
+  --el-table-tr-bg-color: #18181B;
+  --el-table-header-bg-color: #27272A;
+  --el-table-row-hover-bg-color: #27272A;
+  --el-table-border-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Tag overrides */
+.el-tag {
+  border-radius: 6px;
+}

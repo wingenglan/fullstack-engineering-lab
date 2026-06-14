@@ -1,0 +1,33 @@
+# VitePress docs build
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+COPY package.json package-lock.json* ./
+RUN npm install
+
+COPY . .
+RUN npm run build
+
+# Serve with nginx
+FROM nginx:alpine
+
+RUN rm -rf /usr/share/nginx/html/*
+COPY --from=builder /app/.vitepress/dist /usr/share/nginx/html
+
+RUN echo 'server { \
+    listen 80; \
+    root /usr/share/nginx/html; \
+    index index.html; \
+    include /etc/nginx/mime.types; \
+    location /docs/ { \
+        rewrite ^/docs/(.*)$ /$1 last; \
+    } \
+    location / { \
+        try_files $uri $uri/ /index.html; \
+    } \
+}' > /etc/nginx/conf.d/default.conf
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
