@@ -187,3 +187,154 @@ export interface WSErrorPayload {
   code: number
   message: string
 }
+
+// ===== Redis 数据类型 Types =====
+
+// ----- Hash: 用户画像缓存 -----
+
+export interface HashFieldUpdateRequest {
+  key: string
+  field: string
+  value: string
+}
+
+export interface HashMultiSetRequest {
+  key: string
+  fields: Record<string, string>
+}
+
+export interface HashProfileResponse {
+  key: string
+  fields: Record<string, string>
+  num_of_fld: number
+}
+
+// ----- Set: 标签/收藏夹管理 -----
+
+export interface SetAddMembersRequest {
+  key: string
+  members: string[]
+}
+
+export interface SetRemoveMembersRequest {
+  key: string
+  members: string[]
+}
+
+export interface SetListResponse {
+  key: string
+  members: string[]
+  count: number
+}
+
+export interface SetOperationRequest {
+  keys: string[]
+}
+
+export interface SetOperationResponse {
+  keys: string[]
+  op: 'intersect' | 'union' | 'diff'
+  members: string[]
+  count: number
+}
+
+// ----- ZSet: 实时排行榜 -----
+
+export interface ZSetAddScoreRequest {
+  key: string
+  member: string
+  score: number
+}
+
+export interface ZSetRankRequest {
+  key: string
+  member: string
+}
+
+export interface ZSetTopNRequest {
+  key: string
+  n: number
+}
+
+export interface ZSetMemberResponse {
+  key: string
+  member: string
+  score: number
+  rank: number
+}
+
+export interface ZSetRankEntry {
+  rank: number
+  member: string
+  score: number
+}
+
+export interface ZSetTopNResponse {
+  key: string
+  total: number
+  members: ZSetRankEntry[]
+}
+
+// ----- List: 最新活动流 / 简易消息队列 -----
+
+export interface ListPushRequest {
+  key: string
+  value: string
+  pos: 'left' | 'right'
+}
+
+export interface ListPopRequest {
+  key: string
+  pos: 'left' | 'right'
+}
+
+export interface ListRangeRequest {
+  key: string
+  start: number
+  stop: number
+}
+
+export interface ListPopResponse {
+  key: string
+  value: string
+  pos: string
+}
+
+export interface ListRangeResponse {
+  key: string
+  values: string[]
+  length: number
+}
+
+// ----- String: 验证码存储 / 计数器 -----
+
+export interface StringSetRequest {
+  key: string
+  value: string
+  ttl: number
+}
+
+export interface StringSetResponse {
+  key: string
+  value: string
+  ttl: number
+}
+
+export interface StringGetResponse {
+  key: string
+  value: string
+  ttl: number
+  exists: boolean
+}
+
+export interface StringIncrRequest {
+  key: string
+  delta: number
+}
+
+export interface StringIncrResponse {
+  key: string
+  before: number
+  after: number
+  delta: number
+}

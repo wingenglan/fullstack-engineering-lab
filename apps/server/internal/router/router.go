@@ -29,10 +29,12 @@ func Setup(cfg *config.Config, db *gorm.DB, rdb *redis.Client) (*gin.Engine, *ws
 	authService := service.NewAuthService(userRepo, rdb, &cfg.JWT)
 	lockService := service.NewLockService(rdb)
 	chatService := service.NewChatService(chatRepo, hub)
+	redisDataService := service.NewRedisDataService(rdb)
 
 	// 处理器
 	authHandler := handler.NewAuthHandler(authService)
 	lockHandler := handler.NewLockHandler(lockService)
+	redisDataHandler := handler.NewRedisDataHandler(redisDataService)
 	healthHandler := handler.NewHealthHandler(db, rdb)
 	chatHandler := handler.NewChatHandler(chatService)
 
@@ -61,25 +63,58 @@ func Setup(cfg *config.Config, db *gorm.DB, rdb *redis.Client) (*gin.Engine, *ws
 			lock.POST("/contention", lockHandler.ContentionDemo)
 		}
 
-		// WebSocket 实时通讯路由
-		chat := api.Group("/chat")
-		{
-			// 公开接口（获取房间列表、消息历史）
-			chat.GET("/rooms", chatHandler.GetRooms)
-			chat.GET("/rooms/:id", chatHandler.GetRoomInfo)
-			chat.GET("/rooms/:id/online", chatHandler.GetOnlineUsers)
-			chat.GET("/messages", chatHandler.GetMessageHistory)
-
-			// 需认证接口
-			chatAuth := chat.Group("")
-			chatAuth.Use(middleware.JWTAuth(cfg.JWT.Secret, rdb))
+			// WebSocket 实时通讯路由
+			chat := api.Group("/chat")
 			{
-				chatAuth.POST("/rooms", chatHandler.CreateRoom)
+				// 公开接口（获取房间列表、消息历史）
+				chat.GET("/rooms", chatHandler.GetRooms)
+				chat.GET("/rooms/:id", chatHandler.GetRoomInfo)
+				chat.GET("/rooms/:id/online", chatHandler.GetOnlineUsers)
+				chat.GET("/messages", chatHandler.GetMessageHistory)
+
+				// 需认证接口
+				chatAuth := chat.Group("")
+				chatAuth.Use(middleware.JWTAuth(cfg.JWT.Secret, rdb))
+				{
+					chatAuth.POST("/rooms", chatHandler.CreateRoom)
+				}
+
+				// WebSocket 连接（使用 WSAuth 从 URL 参数读取 Token）
+				chat.GET("/ws", middleware.WSAuth(cfg.JWT.Secret, rdb), chatHandler.WS)
 			}
 
-			// WebSocket 连接（使用 WSAuth 从 URL 参数读取 Token）
-			chat.GET("/ws", middleware.WSAuth(cfg.JWT.Secret, rdb), chatHandler.WS)
-		}
+			// Redis 数据类型演示路由（公开访问）—— Hash / Set / ZSet / List / String
+			rd := api.Group("/redis-data")
+			{
+				// Hash: 用户画像缓存
+				rd.POST("/hash/field", redisDataHandler.SetField)
+				rd.GET("/hash/profile", redisDataHandler.GetProfile)
+				rd.POST("/hash/multi-set", redisDataHandler.MultiSet)
+				rd.POST("/hash/delete-field", redisDataHandler.DeleteField)
+
+				// Set: 标签/收藏夹管理
+				rd.POST("/set/add", redisDataHandler.SetAdd)
+				rd.POST("/set/remove", redisDataHandler.SetRemove)
+				rd.GET("/set/members", redisDataHandler.SetMembers)
+				rd.POST("/set/intersect", redisDataHandler.SetIntersect)
+				rd.POST("/set/union", redisDataHandler.SetUnion)
+				rd.POST("/set/diff", redisDataHandler.SetDiff)
+
+				// ZSet: 实时排行榜
+				rd.POST("/zset/add-score", redisDataHandler.ZSetAddScore)
+				rd.POST("/zset/top-n", redisDataHandler.ZSetTopN)
+				rd.POST("/zset/rank", redisDataHandler.ZSetRank)
+
+				// List: 最新活动流 / 简易消息队列
+				rd.POST("/list/push", redisDataHandler.ListPush)
+				rd.POST("/list/pop", redisDataHandler.ListPop)
+				rd.GET("/list/range", redisDataHandler.ListRange)
+
+				// String: 验证码存储 / 计数器
+				rd.POST("/string/set", redisDataHandler.StringSet)
+				rd.GET("/string/get", redisDataHandler.StringGet)
+				rd.POST("/string/incr", redisDataHandler.StringIncr)
+			}
 	}
 
 	return r, hub
