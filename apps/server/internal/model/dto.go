@@ -91,3 +91,55 @@ type ContentionSummary struct {
 	Succeeded  int `json:"succeeded"`
 	Failed     int `json:"failed"`
 }
+
+// ===== WebSocket 实时通讯 DTO =====
+
+// CreateRoomRequest 创建聊天室请求
+type CreateRoomRequest struct {
+	Name        string `json:"name" binding:"required,min=2,max=128"`
+	Description string `json:"description" binding:"max=512"`
+	Type        int8   `json:"type" binding:"required,oneof=1 2"`
+}
+
+// RoomResponse 聊天室响应
+type RoomResponse struct {
+	ID          uint   `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Type        int8   `json:"type"`
+	CreatorID   uint   `json:"creator_id"`
+	MemberCount int    `json:"member_count"`
+	Status      int8   `json:"status"`
+	CreatedAt   string `json:"created_at"`
+}
+
+// MessageResponse 消息响应
+type MessageResponse struct {
+	ID        uint   `json:"id"`
+	RoomID    uint   `json:"room_id"`
+	UserID    uint   `json:"user_id"`
+	Username  string `json:"username"`
+	Content   string `json:"content"`
+	MsgType   int8   `json:"msg_type"`
+	CreatedAt string `json:"created_at"`
+}
+
+// OnlineUserResponse 在线用户信息
+type OnlineUserResponse struct {
+	UserID   uint   `json:"user_id"`
+	Username string `json:"username"`
+	RoomID   uint   `json:"room_id"`
+}
+
+// MessageHistoryRequest 消息历史查询
+type MessageHistoryRequest struct {
+	RoomID uint `json:"room_id" binding:"required"`
+	Limit  int  `json:"limit" binding:"min=1,max=100"`
+	Before uint `json:"before"` // 分页：获取此 ID 之前的消息
+}
+
+// MessageHistoryResponse 消息历史响应
+type MessageHistoryResponse struct {
+	Messages []MessageResponse `json:"messages"`
+	HasMore  bool              `json:"has_more"`
+}

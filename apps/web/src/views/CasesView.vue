@@ -38,7 +38,7 @@ const activeCategory = ref('全部')
 
 const allCases = [
   { id: 'jwt', title: 'JWT 认证授权', description: '基于 JWT 的完整认证流程，包含注册、登录、Token 管理和 Redis 黑名单。', tags: ['Go', 'JWT', 'Redis'], difficulty: 'easy' as const, status: 'available' as const, category: '认证授权', icon: 'i-lucide-shield', to: '/cases/jwt-auth' },
-  { id: 'ws', title: 'WebSocket 实时通信', description: '基于 WebSocket 协议的实时双向通信。', tags: ['WebSocket', 'Go', 'Vue'], difficulty: 'medium' as const, status: 'coming-soon' as const, category: '实时通信', icon: 'i-lucide-message-circle', to: '#' },
+  { id: 'ws', title: 'WebSocket 实时通信', description: '基于 WebSocket 协议的实时双向通信聊天室，支持多房间、消息持久化、在线状态。', tags: ['WebSocket', 'Go', 'Vue'], difficulty: 'medium' as const, status: 'available' as const, category: '实时通信', icon: 'i-lucide-message-circle', to: '/cases/websocket' },
   { id: 'redis-lock', title: 'Redis 分布式锁', description: '基于 Redis SET NX EX 实现的分布式锁，演示互斥、自动过期和并发争抢。', tags: ['Redis', 'Go', 'Lua'], difficulty: 'medium' as const, status: 'available' as const, category: '缓存', icon: 'i-lucide-lock', to: '/cases/redis-lock' },
   { id: 'chunk-upload', title: '大文件分片上传', description: '大文件分片上传，支持断点续传。', tags: ['文件', 'Go', 'Vue'], difficulty: 'medium' as const, status: 'coming-soon' as const, category: '文件存储', icon: 'i-lucide-upload', to: '#' },
   { id: 'mq', title: '消息队列', description: '基于 RabbitMQ 的异步任务处理。', tags: ['RabbitMQ', 'Go'], difficulty: 'hard' as const, status: 'coming-soon' as const, category: '消息队列', icon: 'i-lucide-list-ordered', to: '#' },

@@ -57,7 +57,10 @@ func main() {
 	}
 
 	// 初始化路由
-	r := router.Setup(cfg, db, rdb)
+	r, hub := router.Setup(cfg, db, rdb)
+
+	// 启动 WebSocket Hub
+	go hub.Run()
 
 	// 启动服务
 	addr := fmt.Sprintf(":%d", cfg.App.Port)

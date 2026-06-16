@@ -16,6 +16,7 @@ export default defineConfig({
       { text: '案例', items: [
         { text: 'JWT 认证授权', link: '/cases/jwt-auth' },
         { text: 'Redis 分布式锁', link: '/cases/redis-lock' },
+        { text: 'WebSocket 实时通讯', link: '/cases/websocket' },
       ]},
       { text: '路线图', link: '/roadmap' },
       { text: '贡献指南', link: '/contributing' },
@@ -34,6 +35,7 @@ export default defineConfig({
         items: [
           { text: 'JWT 认证授权', link: '/cases/jwt-auth' },
           { text: 'Redis 分布式锁', link: '/cases/redis-lock' },
+          { text: 'WebSocket 实时通讯', link: '/cases/websocket' },
         ],
       },
       {

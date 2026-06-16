@@ -104,3 +104,86 @@ export interface ContentionDemoResponse {
     failed: number
   }
 }
+
+// ===== WebSocket Chat Types =====
+
+export interface ChatRoom {
+  id: number
+  name: string
+  description: string
+  type: number // 1=群聊, 2=私聊
+  creator_id: number
+  member_count: number
+  status: number
+  created_at: string
+}
+
+export interface ChatMessage {
+  id: number
+  room_id: number
+  user_id: number
+  username: string
+  content: string
+  msg_type: number // 1=文本, 2=图片, 3=系统
+  created_at: string
+}
+
+export interface OnlineUser {
+  user_id: number
+  username: string
+}
+
+export interface MessageHistoryResponse {
+  messages: ChatMessage[]
+  has_more: boolean
+}
+
+export interface CreateRoomRequest {
+  name: string
+  description: string
+  type: number
+}
+
+// WebSocket 消息协议
+export interface WSMessage<T = unknown> {
+  type: string
+  payload: T
+}
+
+export interface WSHistoryPayload {
+  room_id: number
+  messages: ChatMessage[]
+}
+
+export interface WSNewMessagePayload {
+  id: number
+  room_id: number
+  user_id: number
+  username: string
+  content: string
+  msg_type: number
+  created_at: string
+}
+
+export interface WSUserEventPayload {
+  room_id: number
+  user_id: number
+  username: string
+}
+
+export interface WSOnlineUsersPayload {
+  room_id: number
+  users: OnlineUser[]
+  count: number
+}
+
+export interface WSUserTypingPayload {
+  room_id: number
+  user_id: number
+  username: string
+}
+
+export interface WSErrorPayload {
+  code: number
+  message: string
+}

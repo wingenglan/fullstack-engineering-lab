@@ -19,6 +19,8 @@ const (
 	CodeTokenExpired  = 40003
 	CodeForbidden     = 40004
 	CodeLockConflict  = 40009
+	CodeChatError     = 40010
+	CodeRoomFull      = 40011
 	CodeInternalError = 50000
 )
 

@@ -23,6 +23,11 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/views/cases/RedisLockView.vue'),
   },
   {
+    path: '/cases/websocket',
+    name: 'WebSocket',
+    component: () => import('@/views/cases/WebSocketView.vue'),
+  },
+  {
     path: '/roadmap',
     name: 'Roadmap',
     component: () => import('@/views/RoadmapView.vue'),
