@@ -13,6 +13,8 @@ import (
 	"fullstack-engineering-lab/server/internal/database"
 	"fullstack-engineering-lab/server/internal/logger"
 	"fullstack-engineering-lab/server/internal/router"
+	mqttPkg "fullstack-engineering-lab/server/pkg/mqtt"
+	tcpPkg "fullstack-engineering-lab/server/pkg/tcp"
 
 	"github.com/redis/go-redis/v9"
 	"go.uber.org/zap"
@@ -56,8 +58,44 @@ func main() {
 		rdb = nil
 	}
 
+	// 启动 TCP Server
+	tcpCfg := &tcpPkg.ServerConfig{
+		Host:            cfg.TCP.Host,
+		Port:            cfg.TCP.Port,
+		ReadTimeoutSec:  cfg.TCP.ReadTimeoutSec,
+		WriteTimeoutSec: cfg.TCP.WriteTimeoutSec,
+	}
+	tcpServer := tcpPkg.NewServer(tcpCfg)
+	if err := tcpServer.Start(context.Background()); err != nil {
+		zap.L().Fatal("TCP 服务器启动失败", zap.Error(err))
+	}
+	defer tcpServer.Stop()
+	zap.L().Info("TCP 服务器已启动", zap.String("addr", tcpServer.Addr()))
+
+	// 初始化 MQTT Client（失败只 Warn，不 Fatal）
+	var mqttClient *mqttPkg.MQTTClient
+	if cfg.MQTT.Enabled {
+		mqttClient = mqttPkg.NewMQTTClient(&mqttPkg.ClientConfig{
+			Broker:   cfg.MQTT.Broker,
+			ClientID: cfg.MQTT.ClientID,
+			Username: cfg.MQTT.Username,
+			Password: cfg.MQTT.Password,
+			Topics:   cfg.MQTT.SubscribeTopics,
+		})
+
+		mqttCtx, mqttCancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer mqttCancel()
+		if err := mqttClient.Connect(mqttCtx); err != nil {
+			zap.L().Warn("MQTT 连接失败，MQTT 功能不可用", zap.Error(err))
+			mqttClient = nil
+		} else {
+			zap.L().Info("MQTT 客户端已连接", zap.String("broker", cfg.MQTT.Broker))
+			defer mqttClient.Disconnect()
+		}
+	}
+
 	// 初始化路由
-	r, hub := router.Setup(cfg, db, rdb)
+	r, hub := router.Setup(cfg, db, rdb, mqttClient, tcpServer)
 
 	// 启动 WebSocket Hub
 	go hub.Run()

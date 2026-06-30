@@ -12,6 +12,8 @@ type Config struct {
 	MySQL MySQLConfig `mapstructure:"mysql"`
 	Redis RedisConfig `mapstructure:"redis"`
 	JWT   JWTConfig   `mapstructure:"jwt"`
+	MQTT  MQTTConfig  `mapstructure:"mqtt"`
+	TCP   TCPConfig   `mapstructure:"tcp"`
 }
 
 type AppConfig struct {
@@ -47,6 +49,28 @@ func (m *MySQLConfig) DSN() string {
 
 func (r *RedisConfig) Addr() string {
 	return fmt.Sprintf("%s:%d", r.Host, r.Port)
+}
+
+type MQTTConfig struct {
+	Broker              string   `mapstructure:"broker"`
+	ClientID            string   `mapstructure:"client_id"`
+	Username            string   `mapstructure:"username"`
+	Password            string   `mapstructure:"password"`
+	SubscribeTopics     []string `mapstructure:"subscribe_topics"`
+	SimulatorIntervalMs int      `mapstructure:"simulator_interval_ms"`
+	Enabled             bool     `mapstructure:"enabled"`
+}
+
+type TCPConfig struct {
+	Host            string `mapstructure:"host"`
+	Port            int    `mapstructure:"port"`
+	MaxConnections  int    `mapstructure:"max_connections"`
+	ReadTimeoutSec  int    `mapstructure:"read_timeout_sec"`
+	WriteTimeoutSec int    `mapstructure:"write_timeout_sec"`
+}
+
+func (t *TCPConfig) Addr() string {
+	return fmt.Sprintf("%s:%d", t.Host, t.Port)
 }
 
 func Load(configPath string) (*Config, error) {
@@ -101,6 +125,15 @@ func Load(configPath string) (*Config, error) {
 	}
 	if v := viper.GetString("JWT_EXPIRE_MINUTES"); v != "" {
 		viper.Set("jwt.expire_minutes", v)
+	}
+	if v := viper.GetString("MQTT_BROKER"); v != "" {
+		viper.Set("mqtt.broker", v)
+	}
+	if v := viper.GetString("MQTT_ENABLED"); v != "" {
+		viper.Set("mqtt.enabled", v)
+	}
+	if v := viper.GetString("TCP_PORT"); v != "" {
+		viper.Set("tcp.port", v)
 	}
 
 	cfg := &Config{}

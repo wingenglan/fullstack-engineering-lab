@@ -68,10 +68,15 @@ services:
       REDIS_PORT: 6379
       JWT_SECRET: ${JWT_SECRET:-please_change_me}
       JWT_EXPIRE_MINUTES: ${JWT_EXPIRE_MINUTES:-120}
+      MQTT_BROKER: "tcp://mosquitto:1883"
+      MQTT_ENABLED: "true"
+      TCP_PORT: "9090"
     depends_on:
       mysql:
         condition: service_healthy
       redis:
+        condition: service_healthy
+      mosquitto:
         condition: service_healthy
     networks:
       - lab-network
@@ -123,6 +128,28 @@ services:
       - lab-network
 
   # ============================================
+  # Mosquitto MQTT Broker
+  # ============================================
+  mosquitto:
+    image: eclipse-mosquitto:2
+    container_name: lab-mosquitto
+    restart: unless-stopped
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+      - mosquitto-data:/mosquitto/data
+      - mosquitto-log:/mosquitto/log
+    healthcheck:
+      test: ["CMD", "mosquitto_pub", "-h", "localhost", "-t", "health", "-m", "ping", "--quiet"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - lab-network
+
+  # ============================================
   # Future Services (uncomment when ready)
   # ============================================
   # rabbitmq:
@@ -147,6 +174,8 @@ services:
 volumes:
   mysql-data:
   redis-data:
+  mosquitto-data:
+  mosquitto-log:
 
 networks:
   lab-network:

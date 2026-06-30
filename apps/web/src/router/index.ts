@@ -33,6 +33,16 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/views/cases/RedisDataView.vue'),
   },
   {
+    path: '/cases/mqtt',
+    name: 'Mqtt',
+    component: () => import('@/views/cases/MqttView.vue'),
+  },
+  {
+    path: '/cases/tcp',
+    name: 'Tcp',
+    component: () => import('@/views/cases/TcpView.vue'),
+  },
+  {
     path: '/roadmap',
     name: 'Roadmap',
     component: () => import('@/views/RoadmapView.vue'),

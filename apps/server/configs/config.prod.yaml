@@ -9,3 +9,11 @@ mysql:
 redis:
   host: "redis"
   port: 6379
+
+mqtt:
+  broker: "tcp://mosquitto:1883"
+  enabled: true
+
+tcp:
+  host: "0.0.0.0"
+  port: 9090

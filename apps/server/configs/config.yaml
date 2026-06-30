@@ -19,3 +19,20 @@ redis:
 jwt:
   secret: "please_change_me"
   expire_minutes: 120
+
+mqtt:
+  broker: "tcp://localhost:1883"
+  client_id: "lab-server"
+  username: ""
+  password: ""
+  subscribe_topics:
+    - "sensors/#"
+  simulator_interval_ms: 2000
+  enabled: true
+
+tcp:
+  host: "0.0.0.0"
+  port: 9090
+  max_connections: 100
+  read_timeout_sec: 30
+  write_timeout_sec: 10

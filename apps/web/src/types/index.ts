@@ -338,3 +338,105 @@ export interface StringIncrResponse {
   after: number
   delta: number
 }
+
+// ============================================
+// MQTT IoT 设备管理演示类型
+// ============================================
+
+export interface MQTTDeviceInfo {
+  device_id: string
+  type: string
+  name: string
+  online: boolean
+  last_seen: string
+  properties: Record<string, any>
+}
+
+export interface MQTTSSEEvent {
+  type: string // device_online / device_offline / telemetry / command_response
+  device_id?: string
+  topic?: string
+  payload?: string
+  timestamp: string
+}
+
+export interface AddDeviceRequest {
+  type: string
+  name: string
+}
+
+export interface DeviceCommandRequest {
+  command: string
+  params?: Record<string, any>
+}
+
+// ============================================
+// TCP 基础协议演示类型
+// ============================================
+
+export interface TCPSessionResponse {
+  session_id: string
+  created_at: string
+}
+
+export interface TCPSessionInfo {
+  session_id: string
+  remote_addr: string
+  created_at: string
+  last_act_at: string
+  duration_sec: number
+  command_count: number
+  is_alive: boolean
+}
+
+export interface TCPCommandResponse {
+  session_id: string
+  command: string
+  response: string
+  duration_ms: number
+  timestamp: string
+}
+
+export interface TCPStatsResponse {
+  server_addr: string
+  active_sessions: number
+  max_sessions: number
+  uptime_sec: number
+}
+
+// ============================================
+// TCP 聊天室演示类型
+// ============================================
+
+export interface TCPChatSessionRequest {
+  nickname: string
+  room: string
+}
+
+export interface TCPChatMessageRequest {
+  content: string
+}
+
+export interface TCPChatSessionEvent {
+  type: string // connected / message / system / disconnected
+  session_id: string
+  nickname?: string
+  room?: string
+  content?: string
+  timestamp: string
+}
+
+export interface TCPChatRoomInfo {
+  name: string
+  user_count: number
+  users?: string[]
+  created_at: string
+}
+
+export interface TCPChatMessage {
+  room: string
+  nickname: string
+  content: string
+  type: string // message / system_join / system_leave
+  time: string
+}
