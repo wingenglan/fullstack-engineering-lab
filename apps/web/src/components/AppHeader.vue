@@ -7,7 +7,7 @@
           <i class="i-lucide-flask-conical w-5 h-5 text-white" />
         </div>
         <span class="text-text-primary font-semibold text-lg hidden sm:block group-hover:text-brand transition-colors">
-          全栈工程实验室
+          工程实验室
         </span>
       </router-link>
 

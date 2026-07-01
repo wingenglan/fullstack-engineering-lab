@@ -11,7 +11,7 @@
     <footer class="border-t border-border py-8 px-6">
       <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
         <div class="text-text-muted text-sm">
-          &copy; 2026 全栈工程实验室 · MIT License
+          &copy; 2026 工程实验室 · MIT License
         </div>
         <div class="flex items-center gap-6 text-sm text-text-muted">
           <a href="https://github.com" target="_blank" class="hover:text-text-primary transition-colors">GitHub</a>
