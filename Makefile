@@ -6,8 +6,8 @@ PROJECT_NAME := fullstack-engineering-lab
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-15s\033[0m %s\n", $$1, $$2}'
 
-up: ## Start all services with Docker Compose
-	docker compose -f $(COMPOSE_FILE) --env-file .env up -d
+up: ## Start all services with Docker Compose (rebuilds if source changed)
+	docker compose -f $(COMPOSE_FILE) --env-file .env up -d --build
 
 down: ## Stop all services
 	docker compose -f $(COMPOSE_FILE) down
